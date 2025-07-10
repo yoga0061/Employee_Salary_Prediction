@@ -45,7 +45,7 @@ st.markdown("""
     .sidebar .sidebar-content {
         background-color: #e8f4f8;
     }
-    .stSelectbox, .stSlider, .stRadio, .stTextInput {
+    .stSelectbox, .stSlider, .stRadio, .stTextInput, .stNumberInput {
         margin-bottom: 1.5rem;
     }
     .prediction-box {
@@ -90,25 +90,27 @@ with st.form("prediction_form"):
         education_num = st.slider("Years of Education", 1, 20, 10, help="Total years of formal education")
         hours_per_week = st.slider("Weekly Work Hours", 10, 100, 40, help="Typical hours worked per week")
         native_country = st.selectbox("Country of Origin", options=["United-States", "Mexico", "India", "Philippines", "Germany", "Other"], help="Country of origin")
+        capital_gain = st.number_input("Capital Gains", min_value=0, value=0, help="Capital gains")
+        capital_loss = st.number_input("Capital Losses", min_value=0, value=0, help="Capital losses")
+        fnlwgt = st.number_input("Final Weight", min_value=0, value=100000, help="Final weight")
+
     submitted = st.form_submit_button("Predict Salary Range")
 
 # Prediction and results
 if submitted:
-    # Convert inputs to encoded values (in a real app, you'd have proper encoding)
+    # Convert inputs to encoded values
     gender_encoded = 1 if gender == "Male" else 0
-    # Add more encoding logic here...
 
-    # Create input data DataFrame
+    # Create input data DataFrame with all expected features
     input_data = pd.DataFrame([[
         age, workclass, education, education_num, marital_status,
-        occupation, relationship, race, gender_encoded, hours_per_week, native_country
+        occupation, relationship, race, gender_encoded, hours_per_week,
+        native_country, capital_gain, capital_loss, fnlwgt
     ]], columns=[
-        'age', 'workclass', 'education', 'education-num', 'marital-status',
-        'occupation', 'relationship', 'race', 'gender', 'hours-per-week', 'native-country'
+        'age', 'workclass', 'education', 'educational-num', 'marital-status',
+        'occupation', 'relationship', 'race', 'gender', 'hours-per-week',
+        'native-country', 'capital-gain', 'capital-loss', 'fnlwgt'
     ])
-
-    # Debugging: Print the column names
-    st.write("Input Data Columns:", input_data.columns)
 
     with st.spinner('Analyzing the data...'):
         try:
