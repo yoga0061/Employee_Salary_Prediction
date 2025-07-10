@@ -51,6 +51,12 @@ with st.form("prediction_form"):
 def calculate_net_profit(capital_gain, capital_loss):
     return capital_gain - capital_loss
 
+# Function to convert USD to INR
+def convert_to_inr(amount_usd):
+    # Assuming a conversion rate of 1 USD = 83 INR
+    conversion_rate = 83
+    return amount_usd * conversion_rate
+
 # Prediction and results
 if submitted:
     # Convert inputs to encoded values
@@ -92,7 +98,8 @@ if submitted:
         try:
             prediction = model.predict(input_data)[0]
             probability = model.predict_proba(input_data)[0][1]
-            net_profit = calculate_net_profit(capital_gain, capital_loss)
+            net_profit_usd = calculate_net_profit(capital_gain, capital_loss)
+            net_profit_inr = convert_to_inr(net_profit_usd)
 
             st.success("Prediction Complete!")
             st.balloons()
@@ -103,7 +110,7 @@ if submitted:
                     <h3 style='color:#2e7d32'>💰 Prediction: >$50K/year</h3>
                     <p>Confidence: {probability*100:.1f}%</p>
                     <p>This individual is likely earning more than $50,000 annually based on the provided information.</p>
-                    <p>💸 Net Profit: ${net_profit:,.2f}</p>
+                    <p>💸 Net Profit: ${net_profit_usd:,.2f} (₹{net_profit_inr:,.2f} INR)</p>
                 </div>
                 """, unsafe_allow_html=True)
             else:
@@ -112,7 +119,7 @@ if submitted:
                     <h3 style='color:#c62828'>💰 Prediction: ≤$50K/year</h3>
                     <p>Confidence: {(1-probability)*100:.1f}%</p>
                     <p>This individual is likely earning $50,000 or less annually based on the provided information.</p>
-                    <p>💸 Net Profit: ${net_profit:,.2f}</p>
+                    <p>💸 Net Profit: ${net_profit_usd:,.2f} (₹{net_profit_inr:,.2f} INR)</p>
                 </div>
                 """, unsafe_allow_html=True)
         except ValueError as e:
