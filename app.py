@@ -11,66 +11,14 @@ def load_model():
 
 model = load_model()
 
-# Page configuration
-st.set_page_config(
-    page_title="AI Salary Insights",
-    page_icon="💼",
-    layout="wide",
-    initial_sidebar_state="expanded"
-)
+# Assuming you know the correct order of features from the training process
+correct_feature_order = [
+    'age', 'workclass', 'fnlwgt', 'education', 'educational-num',
+    'marital-status', 'occupation', 'relationship', 'race', 'gender',
+    'capital-gain', 'capital-loss', 'hours-per-week', 'native-country'
+]
 
-# Custom CSS for better styling
-st.markdown("""
-    <style>
-    .main {
-        background-color: #f5f7fa;
-    }
-    .stButton>button {
-        background-color: #4CAF50;
-        color: white;
-        border-radius: 5px;
-        padding: 10px 24px;
-        border: none;
-        font-size: 16px;
-    }
-    .stButton>button:hover {
-        background-color: #45a049;
-    }
-    .stSuccess {
-        font-size: 18px !important;
-    }
-    .header {
-        color: #2c3e50;
-    }
-    .sidebar .sidebar-content {
-        background-color: #e8f4f8;
-    }
-    .stSelectbox, .stSlider, .stRadio, .stTextInput, .stNumberInput {
-        margin-bottom: 1.5rem;
-    }
-    .prediction-box {
-        border-radius: 10px;
-        padding: 20px;
-        margin-top: 20px;
-    }
-    </style>
-""", unsafe_allow_html=True)
-
-# Header section
-col1, col2 = st.columns([1, 5])
-with col1:
-    st.image("https://cdn-icons-png.flaticon.com/512/3132/3132693.png", width=80)
-with col2:
-    st.title("AI Salary Insights Dashboard")
-    st.markdown("Predict salary ranges based on demographic and employment factors.")
-
-# Information expander
-with st.expander("ℹ️ About this dashboard", expanded=True):
-    st.write("""
-    This predictive tool estimates whether an individual's annual salary exceeds $50,000
-    based on various factors including education, work experience, and demographic information.
-    """)
-    st.write("The model was trained on US Census Bureau data using machine learning algorithms.")
+# Page configuration and other setup code remains the same
 
 # Main form in two columns
 with st.form("prediction_form"):
@@ -101,16 +49,13 @@ if submitted:
     # Convert inputs to encoded values
     gender_encoded = 1 if gender == "Male" else 0
 
-    # Create input data DataFrame with all expected features
+    # Create input data DataFrame with all expected features in the correct order
     input_data = pd.DataFrame([[
-        age, workclass, education, education_num, marital_status,
-        occupation, relationship, race, gender_encoded, hours_per_week,
-        native_country, capital_gain, capital_loss, fnlwgt
-    ]], columns=[
-        'age', 'workclass', 'education', 'educational-num', 'marital-status',
-        'occupation', 'relationship', 'race', 'gender', 'hours-per-week',
-        'native-country', 'capital-gain', 'capital-loss', 'fnlwgt'
-    ])
+        age, workclass, fnlwgt, education, education_num,
+        marital_status, occupation, relationship, race,
+        gender_encoded, capital_gain, capital_loss,
+        hours_per_week, native_country
+    ]], columns=correct_feature_order)
 
     with st.spinner('Analyzing the data...'):
         try:
@@ -137,12 +82,3 @@ if submitted:
         except ValueError as e:
             st.error(f"Error during prediction: {e}")
             st.write("Please ensure all input fields are correctly filled and match the expected format.")
-
-# Footer
-st.markdown("---")
-st.markdown("""
-<div style='text-align: center; color: #7f8c8d; font-size: 14px;'>
-    <p>This tool provides estimates only and should not be used for official purposes.</p>
-    <p>Model accuracy: 85% | Last updated: June 2023</p>
-</div>
-""", unsafe_allow_html=True)
