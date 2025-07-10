@@ -1,167 +1,305 @@
 import streamlit as st
 import pandas as pd
 import pickle
-from PIL import Image
-
-# Load the model
-@st.cache_data
-def load_model():
-    with open('model.pkl', 'rb') as f:
-        return pickle.load(f)
-
-model = load_model()
-
+from sklearn.preprocessing import LabelEncoder
 # Page configuration
 st.set_page_config(
-    page_title="AI Salary Insights",
+    page_title="Salary Predictor Pro",
     page_icon="💼",
-    layout="centered",
+    layout="wide",
     initial_sidebar_state="expanded"
 )
-
-# Custom CSS
+# Custom Dark Theme CSS
 st.markdown("""
     <style>
-    .main {
-        background-color: #f8f9fa;
-    }
-    .stButton>button {
-        background-color: #4CAF50;
-        color: white;
-        border-radius: 5px;
-        padding: 0.5rem 1rem;
-        border: none;
-    }
-    .stButton>button:hover {
-        background-color: #45a049;
-    }
-    .stSuccess {
-        font-size: 18px !important;
-    }
-    .header {
-        color: #2c3e50;
-    }
+        :root {
+            --primary: #6c5ce7;
+            --secondary: #a29bfe;
+            --accent: #fd79a8;
+            --dark-bg: #0f0e17;
+            --dark-card: #1e1e2e;
+            --dark-text: #fffffe;
+            --dark-subtext: #a7a9be;
+        }
+        
+        body {
+            color: var(--dark-text);
+        }
+        
+        .stApp {
+            background-color: var(--dark-bg);
+        }
+        
+        .stForm {
+            background-color: var(--dark-card);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid #2e2e3a;
+        }
+        
+        .stButton>button {
+            background-color: var(--primary);
+            color: white;
+            border-radius: 8px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s;
+            border: none;
+        }
+        
+        .stButton>button:hover {
+            background-color: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(108, 92, 231, 0.3);
+        }
+        
+        .prediction-box {
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+            background-color: var(--dark-card);
+            border: 1px solid #2e2e3a;
+        }
+        
+        .footer {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            background-color: var(--dark-card);
+            color: var(--dark-subtext);
+            text-align: center;
+            padding: 10px;
+            border-top: 1px solid #2e2e3a;
+            font-size: 0.8rem;
+        }
+        
+        /* Other existing styles... */
     </style>
+""", unsafe_allow_html=True)
+# Load the trained model
+@st.cache_resource
+def load_model():
+    return pickle.load(open("model.pkl", "rb"))
+model = load_model()
+# Exchange rate (example: 1 USD = 83 INR)
+USD_TO_INR = 83
+# Feature order and encoders
+correct_feature_order = [
+    'age', 'workclass', 'fnlwgt', 'education', 'educational-num',
+    'marital-status', 'occupation', 'relationship', 'race', 'gender',
+    'capital-gain', 'capital-loss', 'hours-per-week', 'native-country'
+]
+label_encoders = {feature: LabelEncoder() for feature in correct_feature_order 
+                 if feature not in ['age', 'fnlwgt', 'educational-num', 'capital-gain', 
+                                  'capital-loss', 'hours-per-week']}
+# Sidebar with additional info
+with st.sidebar:
+    st.markdown("## 💼 Salary Predictor Pro")
+    st.markdown("""
+    <p style='color:var(--dark-subtext)'>
+    Predict income levels using advanced machine learning
+    </p>
     """, unsafe_allow_html=True)
-
-# Header
-col1, col2 = st.columns([1, 4])
-with col1:
-    st.image("https://cdn-icons-png.flaticon.com/512/3132/3132693.png", width=80)
-with col2:
-    st.title("🧠 AI Salary Insights Dashboard")
-    st.markdown("Predict salary ranges based on demographic and employment factors")
-
-# Information expander
-with st.expander("ℹ️ About this dashboard"):
-    st.write("""
-    This predictive tool estimates whether an individual's annual salary exceeds $50,000 
-    based on various factors including education, work experience, and demographic information.
-    """)
-    st.write("The model was trained on US Census Bureau data using machine learning algorithms.")
-
-# Main form
-st.header("📋 Enter Your Details")
-with st.form("user_form"):
-    col1, col2 = st.columns(2)
     
-    with col1:
-        st.subheader("Personal Information")
-        age = st.slider("Age", 17, 90, 30, help="Select your current age")
-        gender = st.selectbox("Gender", ["Male", "Female"], help="Select your gender identity")
-        marital_status = st.selectbox("Marital Status", 
-                                    ["Married", "Single", "Divorced", "Widowed"],
-                                    help="Your current marital status")
-        relationship = st.selectbox("Relationship Status", 
-                                  ["Husband", "Wife", "Not-in-family", "Own-child", "Unmarried", "Other-relative"],
-                                  help="Your relationship in household")
-        race = st.selectbox("Race", 
-                          ["White", "Black", "Asian-Pac-Islander", "Amer-Indian-Eskimo", "Other"],
-                          help="Your race/ethnicity")
+    st.markdown("### 🔍 Model Details")
+    st.markdown("""
+    <p style='color:var(--dark-subtext)'>
+    - Algorithm: Random Forest<br>
+    - Accuracy: 85%<br>
+    - Trained on US Census data
+    </p>
+    """, unsafe_allow_html=True)
     
-    with col2:
-        st.subheader("Employment Details")
-        workclass = st.selectbox("Employment Sector", 
-                               ["Private", "Self-emp-not-inc", "Self-emp-inc", "Federal-gov", 
-                                "Local-gov", "State-gov", "Without-pay", "Never-worked"],
-                               help="Your primary employment sector")
-        occupation = st.selectbox("Occupation", 
-                                ["Tech", "Exec-managerial", "Craft-repair", "Sales", 
-                                 "Other-service", "Machine-op-inspct"],
-                                help="Your primary occupation")
-        education = st.selectbox("Highest Education", 
-                               ["Bachelors", "HS-grad", "Some-college", "Masters", 
-                                "Assoc-acdm", "Assoc-voc", "Doctorate"],
-                               help="Your highest education level")
-        education_num = st.slider("Years of Education", 1, 20, 10, 
-                                help="Total years of formal education")
-        hours_per_week = st.slider("Weekly Work Hours", 10, 100, 40, 
-                                 help="Your typical work hours per week")
-        native_country = st.selectbox("Country of Origin", 
-                                    ["India", "United-States", "Philippines", 
-                                     "Germany", "Canada", "Mexico", "Other"],
-                                    help="Your country of origin")
-
-    submitted = st.form_submit_button("Predict Income Level")
-
+    st.markdown("### 🛠️ How To Use")
+    st.markdown("""
+    <p style='color:var(--dark-subtext)'>
+    1. Fill in the form<br>
+    2. Click Predict<br>
+    3. View results
+    </p>
+    """, unsafe_allow_html=True)
+    
+    st.markdown("---")
+    st.markdown("<p style='color:var(--dark-subtext)'>Built with ❤️ using Streamlit</p>", unsafe_allow_html=True)
+# Main content
+st.title("💼 Salary Predictor Pro")
+st.markdown("<p style='color:var(--dark-subtext)'>Predict income levels based on demographic and employment factors</p>", unsafe_allow_html=True)
+# Form in two columns with tabs
+tab1, tab2 = st.tabs(["📝 Input Form", "📊 Model Info"])
+with tab1:
+    with st.form("prediction_form"):
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            st.markdown("### 👤 Personal Details")
+            age = st.slider("Age", 17, 90, 30, 
+                           help="Select the individual's age")
+            gender = st.radio("Gender", 
+                             options=["Female", "Male"], 
+                             help="Select gender identity",
+                             horizontal=True)
+            marital_status = st.selectbox("Marital Status", 
+                                        options=["Married", "Single", "Divorced", "Widowed", "Separated"])
+            relationship = st.selectbox("Relationship Status", 
+                                      options=["Husband", "Wife", "Own-child", "Unmarried", "Other-relative"])
+            race = st.selectbox("Race", 
+                              options=["White", "Black", "Asian-Pac-Islander", "Amer-Indian-Eskimo", "Other"])
+            
+        with col2:
+            st.markdown("### 💼 Employment Info")
+            workclass = st.selectbox("Employment Sector", 
+                                   options=["Private", "Government", "Self-employed", "Non-profit", "Other"])
+            occupation = st.selectbox("Occupation", 
+                                   options=["Tech", "Admin", "Services", "Professional", "Manual-labor", "Other"])
+            education = st.selectbox("Highest Education", 
+                                   options=["HS-grad", "Bachelors", "Masters", "Doctorate", "Some-college", "Other"])
+            education_num = st.slider("Years of Education", 1, 20, 10)
+            hours_per_week = st.slider("Weekly Work Hours", 10, 100, 40)
+            native_country = st.selectbox("Country of Origin", 
+                                        options=["United-States", "Mexico", "India", "Philippines", "Germany", "Other"])
+            
+            st.markdown("### 💰 Financial Data")
+            capital_gain = st.number_input("Capital Gains ($)", min_value=0, value=0)
+            capital_loss = st.number_input("Capital Losses ($)", min_value=0, value=0)
+            fnlwgt = st.number_input("Final Weight", min_value=0, value=100000)
+        
+        submitted = st.form_submit_button("🔮 Predict Income", use_container_width=True)
 # Prediction and results
 if submitted:
-    # Encode categorical features (in a real app, use proper encoding)
-    gender_encoded = 1 if gender == "Male" else 0
-    
-    input_data = pd.DataFrame([{
-        'age': age,
-        'workclass': workclass,
-        'education': education,
-        'education-num': education_num,
-        'marital-status': marital_status,
-        'occupation': occupation,
-        'relationship': relationship,
-        'race': race,
-        'gender': gender_encoded,
-        'hours-per-week': hours_per_week,
-        'native-country': native_country
-    }])
-
-    with st.spinner('Analyzing your information...'):
-        prediction = model.predict(input_data)[0]
-        probability = model.predict_proba(input_data)[0][1]
-        
-        st.success("")
-        st.balloons()
-        
-        if prediction == 1:
-            st.markdown(f"""
-            <div style='background-color:#e8f5e9; padding:20px; border-radius:10px;'>
-                <h3 style='color:#2e7d32'>✅ Predicted Income: >$50K/year</h3>
-                <p>Confidence: {probability*100:.1f}%</p>
-                <p>Based on your information, you're likely earning more than $50,000 annually.</p>
+    with st.spinner('Analyzing data...'):
+        try:
+            # Convert inputs to encoded values
+            gender_encoded = 1 if gender == "Male" else 0
+            # Encode categorical features
+            categorical_features = {
+                'workclass': workclass,
+                'education': education,
+                'marital-status': marital_status,
+                'occupation': occupation,
+                'relationship': relationship,
+                'race': race,
+                'native-country': native_country
+            }
+            for feature, value in categorical_features.items():
+                label_encoders[feature].fit([value])
+            # Create input data DataFrame
+            input_data = pd.DataFrame([[
+                age,
+                label_encoders['workclass'].transform([workclass])[0],
+                fnlwgt,
+                label_encoders['education'].transform([education])[0],
+                education_num,
+                label_encoders['marital-status'].transform([marital_status])[0],
+                label_encoders['occupation'].transform([occupation])[0],
+                label_encoders['relationship'].transform([relationship])[0],
+                label_encoders['race'].transform([race])[0],
+                gender_encoded,
+                capital_gain,
+                capital_loss,
+                hours_per_week,
+                label_encoders['native-country'].transform([native_country])[0]
+            ]], columns=correct_feature_order)
+            # Make prediction
+            prediction = model.predict(input_data)[0]
+            probability = model.predict_proba(input_data)[0][1]
+            
+            st.success("Analysis Complete!")
+            st.balloons()
+            
+            # Display prediction with styling and INR conversion
+            if prediction == 1:
+                inr_amount = 50000 * USD_TO_INR
+                st.markdown(f"""
+                <div class="prediction-box" style='border-left: 6px solid var(--primary);'>
+                    <h2 style='color:var(--primary); margin-top:0;'>💰 High Income Prediction</h2>
+                    <p style='font-size:1.2rem; color:var(--dark-text);'>
+                        This individual is likely earning <strong>>$50K/year (₹{inr_amount:,.0f}/year)</strong>
+                    </p>
+                    <div style='background-color:#2e2e3a; border-radius:8px; padding:1rem; margin:1rem 0;'>
+                        <p style='margin:0; color:var(--dark-subtext);'><strong>Confidence:</strong> {probability*100:.1f}%</p>
+                        <div style='height:10px; background-color:#1e1e2e; border-radius:5px; margin-top:0.5rem;'>
+                            <div style='width:{probability*100}%; height:100%; background-color:var(--primary); border-radius:5px;'></div>
+                        </div>
+                    </div>
+                    <p style='color:var(--dark-subtext);'>Key contributing factors:</p>
+                    <ul style='color:var(--dark-subtext);'>
+                        <li>Education level</li>
+                        <li>Occupation type</li>
+                        <li>Work experience</li>
+                    </ul>
+                </div>
+                """, unsafe_allow_html=True)
+            else:
+                inr_amount = 50000 * USD_TO_INR
+                st.markdown(f"""
+                <div class="prediction-box" style='border-left: 6px solid #ff7675;'>
+                    <h2 style='color:#ff7675; margin-top:0;'>💰 Moderate Income Prediction</h2>
+                    <p style='font-size:1.2rem; color:var(--dark-text);'>
+                        This individual is likely earning <strong>≤$50K/year (≤₹{inr_amount:,.0f}/year)</strong>
+                    </p>
+                    <div style='background-color:#2e2e3a; border-radius:8px; padding:1rem; margin:1rem 0;'>
+                        <p style='margin:0; color:var(--dark-subtext);'><strong>Confidence:</strong> {(1-probability)*100:.1f}%</p>
+                        <div style='height:10px; background-color:#1e1e2e; border-radius:5px; margin-top:0.5rem;'>
+                            <div style='width:{(1-probability)*100}%; height:100%; background-color:#ff7675; border-radius:5px;'></div>
+                        </div>
+                    </div>
+                    <p style='color:var(--dark-subtext);'>Potential influencing factors:</p>
+                    <ul style='color:var(--dark-subtext);'>
+                        <li>Education level</li>
+                        <li>Work hours</li>
+                        <li>Industry sector</li>
+                    </ul>
+                </div>
+                """, unsafe_allow_html=True)
+            
+            # Add recommendations section
+            st.markdown("### 📝 Recommendations")
+            if prediction == 1:
+                st.markdown("""
+                <div style='background-color:#2d3436; padding:1.5rem; border-radius:10px; border-left: 4px solid var(--primary);'>
+                    <h4 style='margin-top:0; color:var(--primary);'>For High Earners:</h4>
+                    <ul style='color:var(--dark-subtext);'>
+                        <li>Tax optimization strategies</li>
+                        <li>Investment portfolio review</li>
+                        <li>Professional development</li>
+                        <li>Retirement planning</li>
+                    </ul>
+                </div>
+                """, unsafe_allow_html=True)
+            else:
+                st.markdown("""
+                <div style='background-color:#2d3436; padding:1.5rem; border-radius:10px; border-left: 4px solid #ff7675;'>
+                    <h4 style='margin-top:0; color:#ff7675;'>For Income Growth:</h4>
+                    <ul style='color:var(--dark-subtext);'>
+                        <li>Additional education/certifications</li>
+                        <li>Higher-paying industry exploration</li>
+                        <li>Skill development</li>
+                        <li>Salary negotiation tactics</li>
+                    </ul>
+                </div>
+                """, unsafe_allow_html=True)
+                
+        except Exception as e:
+            st.error(f"Prediction error: {str(e)}")
+            st.markdown("""
+            <div style='background-color:#2d3436; padding:1rem; border-radius:8px; border-left: 4px solid #ff7675;'>
+                <p style='color:var(--dark-text);'>Please check your inputs and try again.</p>
+                <p style='color:var(--dark-subtext);'>Ensure all fields are filled correctly.</p>
             </div>
             """, unsafe_allow_html=True)
-        else:
-            st.markdown(f"""
-            <div style='background-color:#ffebee; padding:20px; border-radius:10px;'>
-                <h3 style='color:#c62828'>✅ Predicted Income: ≤$50K/year</h3>
-                <p>Confidence: {(1-probability)*100:.1f}%</p>
-                <p>Based on your information, you're likely earning $50,000 or less annually.</p>
-            </div>
-            """, unsafe_allow_html=True)
-        
-        # Insights
-        with st.expander("📊 See what influenced this prediction"):
-            st.write("Key factors in this prediction:")
-            if age > 40:
-                st.write("- Older age typically correlates with higher earnings")
-            if education in ["Masters", "Doctorate"]:
-                st.write("- Advanced degrees significantly increase earning potential")
-            if hours_per_week > 45:
-                st.write("- Longer work hours may indicate higher compensation")
-
 # Footer
-st.markdown("---")
 st.markdown("""
-<div style='text-align: center; color: #7f8c8d; font-size: 14px;'>
-    <p>This tool provides estimates only and should not be used for official purposes.</p>
-    <p>Model accuracy: 85% | Last updated: June 2023</p>
-</div>
+    <hr style="border: 1px solid #444; margin-top: 40px; margin-bottom: 20px;" />
+    <div style="text-align: center; color: #a7a9be; font-size: 14px; line-height: 1.6;">
+        <p>© 2025 <strong style="color: #6c5ce7;">AI Salary Insights Dashboard</strong> | Built with ❤️ by <strong style="color: #6c5ce7;">Yoganandha</strong></p>
+        <div style="margin: 10px 0;">
+            <a href="https://www.linkedin.com/in/yoganandha-banavathu-a02092305/" target="_blank" style="text-decoration: none; color: #a7a9be; margin: 0 10px;">💼 LinkedIn</a>
+            <span style="color: #a7a9be;">|</span>
+            <a href="https://yoga0061.github.io/portfolio/" target="_blank" style="text-decoration: none; color: #a7a9be; margin: 0 10px;">🌐 Portfolio</a>
+        </div>
+        <p style="font-style: italic; font-size: 12px; color: #a7a9be;"><em>Disclaimer:</em> Predictions are AI-based estimates and not guaranteed.</p>
+        <p style="font-size: 12px; color: #a7a9be;"><small>Exchange Rate (FYI): 1 USD ≈ 83 INR</small></p>
+    </div>
 """, unsafe_allow_html=True)
