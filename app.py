@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import pickle
-import plotly.express as px
+#import plotly.express as px
 from sklearn.preprocessing import LabelEncoder
 
 # Page configuration
