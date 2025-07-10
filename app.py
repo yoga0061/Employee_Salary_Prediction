@@ -75,7 +75,6 @@ with st.expander("ℹ️ About this dashboard", expanded=True):
 # Main form in two columns
 with st.form("prediction_form"):
     col1, col2 = st.columns(2)
-
     with col1:
         st.subheader("Personal Information")
         age = st.slider("Age", 17, 90, 30, help="Select the individual's age")
@@ -83,7 +82,6 @@ with st.form("prediction_form"):
         marital_status = st.selectbox("Marital Status", options=["Married", "Single", "Divorced", "Widowed", "Separated"], help="Current marital status")
         relationship = st.selectbox("Relationship Status", options=["Husband", "Wife", "Own-child", "Unmarried", "Other-relative"], help="Relationship status in household")
         race = st.selectbox("Race", options=["White", "Black", "Asian-Pac-Islander", "Amer-Indian-Eskimo", "Other"], help="Race/ethnicity")
-
     with col2:
         st.subheader("Employment Details")
         workclass = st.selectbox("Employment Sector", options=["Private", "Government", "Self-employed", "Non-profit", "Other"], help="Primary employment sector")
@@ -92,7 +90,6 @@ with st.form("prediction_form"):
         education_num = st.slider("Years of Education", 1, 20, 10, help="Total years of formal education")
         hours_per_week = st.slider("Weekly Work Hours", 10, 100, 40, help="Typical hours worked per week")
         native_country = st.selectbox("Country of Origin", options=["United-States", "Mexico", "India", "Philippines", "Germany", "Other"], help="Country of origin")
-
     submitted = st.form_submit_button("Predict Salary Range")
 
 # Prediction and results
@@ -101,6 +98,7 @@ if submitted:
     gender_encoded = 1 if gender == "Male" else 0
     # Add more encoding logic here...
 
+    # Create input data DataFrame
     input_data = pd.DataFrame([[
         age, workclass, education, education_num, marital_status,
         occupation, relationship, race, gender_encoded, hours_per_week, native_country
@@ -109,39 +107,34 @@ if submitted:
         'occupation', 'relationship', 'race', 'gender', 'hours-per-week', 'native-country'
     ])
 
+    # Debugging: Print the column names
+    st.write("Input Data Columns:", input_data.columns)
+
     with st.spinner('Analyzing the data...'):
-        prediction = model.predict(input_data)[0]
-        probability = model.predict_proba(input_data)[0][1]
-
-        st.success("Prediction Complete!")
-        st.balloons()
-
-        if prediction == 1:
-            st.markdown(f"""
-            <div class="prediction-box" style='background-color:#e8f5e9;'>
-                <h3 style='color:#2e7d32'>💰 Prediction: >$50K/year</h3>
-                <p>Confidence: {probability*100:.1f}%</p>
-                <p>This individual is likely earning more than $50,000 annually based on the provided information.</p>
-            </div>
-            """, unsafe_allow_html=True)
-        else:
-            st.markdown(f"""
-            <div class="prediction-box" style='background-color:#ffebee;'>
-                <h3 style='color:#c62828'>💰 Prediction: ≤$50K/year</h3>
-                <p>Confidence: {(1-probability)*100:.1f}%</p>
-                <p>This individual is likely earning $50,000 or less annually based on the provided information.</p>
-            </div>
-            """, unsafe_allow_html=True)
-
-        # Add some insights based on the input
-        with st.expander("📊 Insights", expanded=True):
-            st.write("Key factors influencing this prediction:")
-            if age > 40:
-                st.write("- Older age typically correlates with higher earnings")
-            if education_num >= 16:
-                st.write("- Advanced education significantly increases earning potential")
-            if hours_per_week > 45:
-                st.write("- Longer work hours may indicate higher compensation")
+        try:
+            prediction = model.predict(input_data)[0]
+            probability = model.predict_proba(input_data)[0][1]
+            st.success("Prediction Complete!")
+            st.balloons()
+            if prediction == 1:
+                st.markdown(f"""
+                <div class="prediction-box" style='background-color:#e8f5e9;'>
+                    <h3 style='color:#2e7d32'>💰 Prediction: >$50K/year</h3>
+                    <p>Confidence: {probability*100:.1f}%</p>
+                    <p>This individual is likely earning more than $50,000 annually based on the provided information.</p>
+                </div>
+                """, unsafe_allow_html=True)
+            else:
+                st.markdown(f"""
+                <div class="prediction-box" style='background-color:#ffebee;'>
+                    <h3 style='color:#c62828'>💰 Prediction: ≤$50K/year</h3>
+                    <p>Confidence: {(1-probability)*100:.1f}%</p>
+                    <p>This individual is likely earning $50,000 or less annually based on the provided information.</p>
+                </div>
+                """, unsafe_allow_html=True)
+        except ValueError as e:
+            st.error(f"Error during prediction: {e}")
+            st.write("Please ensure all input fields are correctly filled and match the expected format.")
 
 # Footer
 st.markdown("---")
