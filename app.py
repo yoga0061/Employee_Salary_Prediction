@@ -47,6 +47,10 @@ with st.form("prediction_form"):
 
     submitted = st.form_submit_button("Predict Salary Range")
 
+# Function to calculate net profit
+def calculate_net_profit(capital_gain, capital_loss):
+    return capital_gain - capital_loss
+
 # Prediction and results
 if submitted:
     # Convert inputs to encoded values
@@ -64,7 +68,7 @@ if submitted:
     }
 
     for feature, value in categorical_features.items():
-        label_encoders[feature].fit_transform([value])
+        label_encoders[feature].fit([value])
 
     # Create input data DataFrame with all expected features in the correct order
     input_data = pd.DataFrame([[
@@ -88,14 +92,18 @@ if submitted:
         try:
             prediction = model.predict(input_data)[0]
             probability = model.predict_proba(input_data)[0][1]
+            net_profit = calculate_net_profit(capital_gain, capital_loss)
+
             st.success("Prediction Complete!")
             st.balloons()
+
             if prediction == 1:
                 st.markdown(f"""
                 <div class="prediction-box" style='background-color:#e8f5e9;'>
                     <h3 style='color:#2e7d32'>💰 Prediction: >$50K/year</h3>
                     <p>Confidence: {probability*100:.1f}%</p>
                     <p>This individual is likely earning more than $50,000 annually based on the provided information.</p>
+                    <p>💸 Net Profit: ${net_profit:,.2f}</p>
                 </div>
                 """, unsafe_allow_html=True)
             else:
@@ -104,6 +112,7 @@ if submitted:
                     <h3 style='color:#c62828'>💰 Prediction: ≤$50K/year</h3>
                     <p>Confidence: {(1-probability)*100:.1f}%</p>
                     <p>This individual is likely earning $50,000 or less annually based on the provided information.</p>
+                    <p>💸 Net Profit: ${net_profit:,.2f}</p>
                 </div>
                 """, unsafe_allow_html=True)
         except ValueError as e:
