@@ -2,7 +2,7 @@
 import streamlit as st
 import pandas as pd
 import pickle
-from PIL import Image
+from sklearn.preprocessing import LabelEncoder
 
 # Load the trained model
 @st.cache_resource
@@ -17,6 +17,9 @@ correct_feature_order = [
     'marital-status', 'occupation', 'relationship', 'race', 'gender',
     'capital-gain', 'capital-loss', 'hours-per-week', 'native-country'
 ]
+
+# Initialize LabelEncoders for categorical features
+label_encoders = {feature: LabelEncoder() for feature in correct_feature_order if feature not in ['age', 'fnlwgt', 'educational-num', 'capital-gain', 'capital-loss', 'hours-per-week']}
 
 # Page configuration and other setup code remains the same
 
@@ -49,12 +52,36 @@ if submitted:
     # Convert inputs to encoded values
     gender_encoded = 1 if gender == "Male" else 0
 
+    # Encode categorical features
+    categorical_features = {
+        'workclass': workclass,
+        'education': education,
+        'marital-status': marital_status,
+        'occupation': occupation,
+        'relationship': relationship,
+        'race': race,
+        'native-country': native_country
+    }
+
+    for feature, value in categorical_features.items():
+        label_encoders[feature].fit_transform([value])
+
     # Create input data DataFrame with all expected features in the correct order
     input_data = pd.DataFrame([[
-        age, workclass, fnlwgt, education, education_num,
-        marital_status, occupation, relationship, race,
-        gender_encoded, capital_gain, capital_loss,
-        hours_per_week, native_country
+        age,
+        label_encoders['workclass'].transform([workclass])[0],
+        fnlwgt,
+        label_encoders['education'].transform([education])[0],
+        education_num,
+        label_encoders['marital-status'].transform([marital_status])[0],
+        label_encoders['occupation'].transform([occupation])[0],
+        label_encoders['relationship'].transform([relationship])[0],
+        label_encoders['race'].transform([race])[0],
+        gender_encoded,
+        capital_gain,
+        capital_loss,
+        hours_per_week,
+        label_encoders['native-country'].transform([native_country])[0]
     ]], columns=correct_feature_order)
 
     with st.spinner('Analyzing the data...'):
