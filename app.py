@@ -7,7 +7,7 @@ from PIL import Image
 st.set_page_config(
     page_title="AI Salary Insights",
     page_icon="💰",
-    layout="centered",
+    layout="wide",
     initial_sidebar_state="expanded"
 )
 
@@ -27,8 +27,9 @@ st.markdown("""
             background-color: #4CAF50;
             color: white;
             border-radius: 5px;
-            padding: 0.5rem 1rem;
+            padding: 0.75rem 1rem;
             width: 100%;
+            font-size: 1rem;
             transition: all 0.3s;
         }
         .stButton>button:hover {
@@ -52,6 +53,18 @@ st.markdown("""
         }
         .sidebar .sidebar-content {
             background-color: #2c3e50;
+            color: white;
+        }
+        .sidebar .sidebar-content p, .sidebar .sidebar-content li {
+            color: white;
+        }
+        .prediction-card {
+            background-color: #e8f5e9;
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin: 1rem auto;
         }
     </style>
 """, unsafe_allow_html=True)
@@ -91,14 +104,14 @@ st.markdown("---")
 with st.form("user_form"):
     st.header("📋 Personal Information")
     col1, col2 = st.columns(2)
-    
+
     with col1:
         age = st.slider("Age", 17, 90, 30, help="Select your current age")
         gender = st.selectbox("Gender", ["Male", "Female", "Other"])
         marital_status = st.selectbox("Marital Status", ["Married", "Single", "Divorced", "Widowed"])
         relationship = st.selectbox("Relationship Status", ["Husband", "Wife", "Not-in-family", "Own-child", "Unmarried", "Other-relative"])
         race = st.selectbox("Race", ["White", "Black", "Asian-Pac-Islander", "Amer-Indian-Eskimo", "Other"])
-    
+
     with col2:
         workclass = st.selectbox("Employment Sector", ["Private", "Self-emp-not-inc", "Self-emp-inc", "Federal-gov", "Local-gov", "State-gov", "Without-pay", "Never-worked"])
         occupation = st.selectbox("Occupation", ["Tech", "Exec-managerial", "Craft-repair", "Sales", "Other-service", "Machine-op-inspct"])
@@ -106,18 +119,19 @@ with st.form("user_form"):
         education_num = st.slider("Years of Education", 1, 20, 12)
         hours_per_week = st.slider("Weekly Work Hours", 10, 100, 40)
         native_country = st.selectbox("Country of Origin", ["India", "United-States", "Philippines", "Germany", "Canada", "Mexico", "Other"])
-    
+
     submitted = st.form_submit_button("🔮 Predict Income Level", help="Click to get your income prediction")
 
 # Predict and display results
 if submitted:
     st.balloons()
-    
+
     # Match model input structure
     input_data = pd.DataFrame([{
         'age': age,
         'workclass': workclass,
         'education': education,
+        'education-num': education_num,
         'marital-status': marital_status,
         'occupation': occupation,
         'relationship': relationship,
@@ -129,24 +143,24 @@ if submitted:
 
     # Predict
     prediction = model.predict(input_data)[0]
-    
+
     # Display results in a nice card
     st.markdown("---")
     col1, col2, col3 = st.columns([1, 3, 1])
     with col2:
         st.markdown(f"""
-        <div style='background-color: #e8f5e9; border-radius: 10px; padding: 2rem; text-align: center; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);'>
+        <div class="prediction-card">
             <h3 style='color: #2e7d32;'>Prediction Result</h3>
             <p style='font-size: 1.5rem;'>Your predicted income is:</p>
             <h2 style='color: #1b5e20;'>💰 {prediction} 💰</h2>
             <p style='font-size: 0.9rem; color: #666;'>This is an estimate based on the information provided.</p>
         </div>
         """, unsafe_allow_html=True)
-    
+
     # Add some additional insights
     st.markdown("---")
     st.markdown("### 💡 Insights & Recommendations")
-    
+
     if ">50K" in prediction:
         st.success("Based on your profile, you're likely in a higher income bracket. Consider investment opportunities to grow your wealth further.")
     else:
