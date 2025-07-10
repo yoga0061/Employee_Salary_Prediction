@@ -309,7 +309,14 @@ if submitted:
 
 # Footer
 st.markdown("""
-    <div class="footer">
-        <p>© 2023 Salary Predictor Pro | Disclaimer: Predictions are estimates only | Exchange Rate: 1 USD = 83 INR</p>
+    <hr style="border: 1px solid #eee;" />
+    <div style="text-align:center; color:gray; font-size:14px; margin-top:20px;">
+        <p>© 2025 <strong>AI Salary Insights Dashboard</strong> | Built by <strong>Yoganandha</strong></p>
+        <p>
+            💼 <a href="https://www.linkedin.com/in/yoganandha-banavathu-a02092305/" target="_blank" style="text-decoration:none; color:gray;">LinkedIn</a> |
+            🌐 <a href="https://github.com/yoga0061/portfolio" target="_blank" style="text-decoration:none; color:gray;">Portfolio</a>
+        </p>
+        <p><em>Disclaimer:</em> Predictions are AI-based estimates and not guaranteed.</p>
+        <p><small>Exchange Rate (FYI): 1 USD ≈ 83 INR</small></p>
     </div>
 """, unsafe_allow_html=True)
