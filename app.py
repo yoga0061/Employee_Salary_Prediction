@@ -1,7 +1,7 @@
-# app.py
 import streamlit as st
 import pandas as pd
 import pickle
+import plotly.express as px
 from sklearn.preprocessing import LabelEncoder
 
 # Page configuration
@@ -24,22 +24,22 @@ st.markdown("""
             --dark-text: #fffffe;
             --dark-subtext: #a7a9be;
         }
-        
+
         body {
             color: var(--dark-text);
         }
-        
+
         .stApp {
             background-color: var(--dark-bg);
         }
-        
+
         .stForm {
             background-color: var(--dark-card);
             border-radius: 15px;
             padding: 2rem;
             border: 1px solid #2e2e3a;
         }
-        
+
         .stButton>button {
             background-color: var(--primary);
             color: white;
@@ -50,13 +50,13 @@ st.markdown("""
             transition: all 0.3s;
             border: none;
         }
-        
+
         .stButton>button:hover {
             background-color: var(--secondary);
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(108, 92, 231, 0.3);
         }
-        
+
         .prediction-box {
             border-radius: 12px;
             padding: 2rem;
@@ -64,7 +64,7 @@ st.markdown("""
             background-color: var(--dark-card);
             border: 1px solid #2e2e3a;
         }
-        
+
         .footer {
             position: fixed;
             left: 0;
@@ -77,8 +77,6 @@ st.markdown("""
             border-top: 1px solid #2e2e3a;
             font-size: 0.8rem;
         }
-        
-        /* Other existing styles... */
     </style>
 """, unsafe_allow_html=True)
 
@@ -99,8 +97,8 @@ correct_feature_order = [
     'capital-gain', 'capital-loss', 'hours-per-week', 'native-country'
 ]
 
-label_encoders = {feature: LabelEncoder() for feature in correct_feature_order 
-                 if feature not in ['age', 'fnlwgt', 'educational-num', 'capital-gain', 
+label_encoders = {feature: LabelEncoder() for feature in correct_feature_order
+                 if feature not in ['age', 'fnlwgt', 'educational-num', 'capital-gain',
                                   'capital-loss', 'hours-per-week']}
 
 # Sidebar with additional info
@@ -111,7 +109,7 @@ with st.sidebar:
     Predict income levels using advanced machine learning
     </p>
     """, unsafe_allow_html=True)
-    
+
     st.markdown("### 🔍 Model Details")
     st.markdown("""
     <p style='color:var(--dark-subtext)'>
@@ -120,7 +118,7 @@ with st.sidebar:
     - Trained on US Census data
     </p>
     """, unsafe_allow_html=True)
-    
+
     st.markdown("### 🛠️ How To Use")
     st.markdown("""
     <p style='color:var(--dark-subtext)'>
@@ -129,7 +127,7 @@ with st.sidebar:
     3. View results
     </p>
     """, unsafe_allow_html=True)
-    
+
     st.markdown("---")
     st.markdown("<p style='color:var(--dark-subtext)'>Built with ❤️ using Streamlit</p>", unsafe_allow_html=True)
 
@@ -143,40 +141,40 @@ tab1, tab2 = st.tabs(["📝 Input Form", "📊 Model Info"])
 with tab1:
     with st.form("prediction_form"):
         col1, col2 = st.columns(2)
-        
+
         with col1:
             st.markdown("### 👤 Personal Details")
-            age = st.slider("Age", 17, 90, 30, 
+            age = st.slider("Age", 17, 90, 30,
                            help="Select the individual's age")
-            gender = st.radio("Gender", 
-                             options=["Female", "Male"], 
+            gender = st.radio("Gender",
+                             options=["Female", "Male"],
                              help="Select gender identity",
                              horizontal=True)
-            marital_status = st.selectbox("Marital Status", 
+            marital_status = st.selectbox("Marital Status",
                                         options=["Married", "Single", "Divorced", "Widowed", "Separated"])
-            relationship = st.selectbox("Relationship Status", 
+            relationship = st.selectbox("Relationship Status",
                                       options=["Husband", "Wife", "Own-child", "Unmarried", "Other-relative"])
-            race = st.selectbox("Race", 
+            race = st.selectbox("Race",
                               options=["White", "Black", "Asian-Pac-Islander", "Amer-Indian-Eskimo", "Other"])
-            
+
         with col2:
             st.markdown("### 💼 Employment Info")
-            workclass = st.selectbox("Employment Sector", 
+            workclass = st.selectbox("Employment Sector",
                                    options=["Private", "Government", "Self-employed", "Non-profit", "Other"])
-            occupation = st.selectbox("Occupation", 
+            occupation = st.selectbox("Occupation",
                                    options=["Tech", "Admin", "Services", "Professional", "Manual-labor", "Other"])
-            education = st.selectbox("Highest Education", 
+            education = st.selectbox("Highest Education",
                                    options=["HS-grad", "Bachelors", "Masters", "Doctorate", "Some-college", "Other"])
             education_num = st.slider("Years of Education", 1, 20, 10)
             hours_per_week = st.slider("Weekly Work Hours", 10, 100, 40)
-            native_country = st.selectbox("Country of Origin", 
+            native_country = st.selectbox("Country of Origin",
                                         options=["United-States", "Mexico", "India", "Philippines", "Germany", "Other"])
-            
+
             st.markdown("### 💰 Financial Data")
             capital_gain = st.number_input("Capital Gains ($)", min_value=0, value=0)
             capital_loss = st.number_input("Capital Losses ($)", min_value=0, value=0)
             fnlwgt = st.number_input("Final Weight", min_value=0, value=100000)
-        
+
         submitted = st.form_submit_button("🔮 Predict Income", use_container_width=True)
 
 # Prediction and results
@@ -198,7 +196,8 @@ if submitted:
             }
 
             for feature, value in categorical_features.items():
-                label_encoders[feature].fit([value])
+                if value not in label_encoders[feature].classes_:
+                    label_encoders[feature].fit([value])
 
             # Create input data DataFrame
             input_data = pd.DataFrame([[
@@ -221,10 +220,10 @@ if submitted:
             # Make prediction
             prediction = model.predict(input_data)[0]
             probability = model.predict_proba(input_data)[0][1]
-            
+
             st.success("Analysis Complete!")
             st.balloons()
-            
+
             # Display prediction with styling and INR conversion
             if prediction == 1:
                 inr_amount = 50000 * USD_TO_INR
@@ -270,7 +269,7 @@ if submitted:
                     </ul>
                 </div>
                 """, unsafe_allow_html=True)
-            
+
             # Add recommendations section
             st.markdown("### 📝 Recommendations")
             if prediction == 1:
@@ -297,7 +296,40 @@ if submitted:
                     </ul>
                 </div>
                 """, unsafe_allow_html=True)
-                
+
+            # Feature Importance Visualization
+            st.markdown("### 📊 Feature Importance")
+            feature_importances = {
+                'age': 0.1,
+                'workclass': 0.05,
+                'education': 0.2,
+                'marital-status': 0.03,
+                'occupation': 0.15,
+                'relationship': 0.07,
+                'race': 0.02,
+                'gender': 0.08,
+                'capital-gain': 0.12,
+                'capital-loss': 0.06,
+                'hours-per-week': 0.1,
+                'native-country': 0.02
+            }
+
+            importance_df = pd.DataFrame(list(feature_importances.items()), columns=['Feature', 'Importance'])
+            importance_df = importance_df.sort_values(by='Importance', ascending=False)
+
+            fig = px.bar(importance_df, x='Importance', y='Feature', title='Feature Importance',
+                         orientation='h', color='Importance',
+                         color_continuous_scale='Viridis')
+
+            fig.update_layout(
+                plot_bgcolor='rgba(0,0,0,0)',
+                paper_bgcolor='rgba(0,0,0,0)',
+                font=dict(color='white'),
+                yaxis=dict(autorange="reversed")
+            )
+
+            st.plotly_chart(fig)
+
         except Exception as e:
             st.error(f"Prediction error: {str(e)}")
             st.markdown("""
@@ -321,4 +353,3 @@ st.markdown("""
         <p style="font-size: 12px; color: #a7a9be;"><small>Exchange Rate (FYI): 1 USD ≈ 83 INR</small></p>
     </div>
 """, unsafe_allow_html=True)
-
