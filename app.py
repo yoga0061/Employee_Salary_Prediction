@@ -11,41 +11,78 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS for professional styling
+# Custom CSS for modern styling
 st.markdown("""
     <style>
-        .main {
-            background-color: #f8f9fa;
+        :root {
+            --primary-color: #4a6fa5;
+            --secondary-color: #166088;
+            --accent-color: #4fc3f7;
+            --dark-color: #1a1a2e;
+            --light-color: #f8f9fa;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
         }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            color: var(--dark-color);
+            background-color: var(--light-color);
+        }
+
+        .stApp {
+            background-color: var(--light-color);
+        }
+
         .stButton>button {
-            background-color: #6c757d;
+            background-color: var(--primary-color);
             color: white;
-            padding: 10px 24px;
             border: none;
-            border-radius: 4px;
+            border-radius: 5px;
+            padding: 10px 24px;
+            font-size: 16px;
+            transition: background-color 0.3s;
         }
+
         .stButton>button:hover {
-            background-color: #5a6268;
+            background-color: var(--secondary-color);
         }
+
         .stSelectbox, .stSlider, .stNumberInput, .stRadio, .stTextInput {
             margin-bottom: 1rem;
         }
+
         .prediction-box {
             border: 1px solid #dee2e6;
             border-radius: 5px;
             padding: 15px;
             margin: 10px 0;
-            background-color: #ffffff;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
+
         .footer {
             position: fixed;
             left: 0;
             bottom: 0;
             width: 100%;
-            background-color: #343a40;
+            background-color: var(--dark-color);
             color: white;
             text-align: center;
             padding: 10px;
+        }
+
+        .sidebar .sidebar-content {
+            background-color: var(--dark-color);
+            color: white;
+        }
+
+        .sidebar .sidebar-content .stMarkdown {
+            color: white;
+        }
+
+        .sidebar .sidebar-content .stMarkdown a {
+            color: var(--accent-color);
         }
     </style>
 """, unsafe_allow_html=True)
@@ -166,7 +203,7 @@ if submitted:
                 inr_amount = 50000 * USD_TO_INR
                 st.markdown(f"""
                 <div class="prediction-box">
-                    <h2>💰 High Income Prediction</h2>
+                    <h2 style='color: var(--success-color);'>💰 High Income Prediction</h2>
                     <p>This individual is likely earning <strong>>$50K/year (₹{inr_amount:,.0f}/year)</strong></p>
                     <p><strong>Confidence:</strong> {probability*100:.1f}%</p>
                     <p>Key contributing factors:</p>
@@ -181,7 +218,7 @@ if submitted:
                 inr_amount = 50000 * USD_TO_INR
                 st.markdown(f"""
                 <div class="prediction-box">
-                    <h2>💰 Moderate Income Prediction</h2>
+                    <h2 style='color: var(--danger-color);'>💰 Moderate Income Prediction</h2>
                     <p>This individual is likely earning <strong>≤$50K/year (≤₹{inr_amount:,.0f}/year)</strong></p>
                     <p><strong>Confidence:</strong> {(1-probability)*100:.1f}%</p>
                     <p>Potential influencing factors:</p>
