@@ -1,4 +1,3 @@
-# app.py
 import streamlit as st
 import pandas as pd
 import pickle
@@ -29,17 +28,17 @@ st.markdown("""
             --warning: #fdcb6e;
             --danger: #ff7675;
         }
-        
+
         body {
             color: var(--dark-text);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
         .stApp {
             background-color: var(--dark-bg);
             background-image: radial-gradient(circle at 10% 20%, rgba(108, 92, 231, 0.1) 0%, rgba(0, 0, 0, 0) 90%);
         }
-        
+
         .stForm {
             background-color: var(--dark-card);
             border-radius: 15px;
@@ -47,7 +46,7 @@ st.markdown("""
             border: 1px solid #2e2e3a;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
         }
-        
+
         .stButton>button {
             background: linear-gradient(135deg, var(--primary), var(--primary-light));
             color: white;
@@ -59,12 +58,12 @@ st.markdown("""
             border: none;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-        
+
         .stButton>button:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 12px rgba(108, 92, 231, 0.3);
         }
-        
+
         .prediction-box {
             border-radius: 12px;
             padding: 2rem;
@@ -74,12 +73,12 @@ st.markdown("""
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
             transition: all 0.3s ease;
         }
-        
+
         .prediction-box:hover {
             transform: translateY(-5px);
             box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
         }
-        
+
         .feature-card {
             background-color: var(--dark-card);
             border-radius: 10px;
@@ -87,7 +86,7 @@ st.markdown("""
             margin: 1rem 0;
             border-left: 4px solid var(--primary);
         }
-        
+
         .header {
             color: var(--primary);
             border-bottom: 2px solid var(--accent);
@@ -95,49 +94,49 @@ st.markdown("""
             margin-bottom: 1.5rem;
             font-weight: 700;
         }
-        
+
         .sidebar .sidebar-content {
             background: linear-gradient(180deg, #121212, #1e1e1e);
             color: var(--dark-text);
             border-right: 1px solid #2e2e3a;
         }
-        
+
         .stSelectbox, .stRadio, .stSlider, .stNumberInput {
             background-color: var(--dark-card);
             border: 1px solid #2e2e3a;
             border-radius: 8px;
             padding: 8px 12px;
         }
-        
+
         .stTextInput>div>div>input {
             background-color: var(--dark-card);
             color: var(--dark-text);
             border: 1px solid #2e2e3a;
         }
-        
+
         .stSpinner>div {
             border-color: var(--primary) transparent transparent transparent;
         }
-        
+
         /* Custom scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
         }
-        
+
         ::-webkit-scrollbar-track {
             background: var(--dark-bg);
         }
-        
+
         ::-webkit-scrollbar-thumb {
             background: var(--primary);
             border-radius: 4px;
         }
-        
+
         /* Tab styling */
         .stTabs [data-baseweb="tab-list"] {
             gap: 10px;
         }
-        
+
         .stTabs [data-baseweb="tab"] {
             background-color: var(--dark-card);
             color: var(--dark-subtext);
@@ -146,13 +145,13 @@ st.markdown("""
             transition: all 0.3s;
             border: 1px solid transparent;
         }
-        
+
         .stTabs [aria-selected="true"] {
             background-color: var(--primary);
             color: white;
             border-color: var(--primary);
         }
-        
+
         /* Tooltip styling */
         .stTooltip {
             background-color: var(--dark-card) !important;
@@ -160,7 +159,7 @@ st.markdown("""
             border: 1px solid #2e2e3a !important;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
         }
-        
+
         /* Footer styling */
         .footer {
             position: relative;
@@ -174,28 +173,28 @@ st.markdown("""
             border-top: 1px solid #2e2e3a;
             margin-top: 3rem;
         }
-        
+
         .footer a {
             color: var(--primary-light);
             text-decoration: none;
             transition: all 0.3s;
         }
-        
+
         .footer a:hover {
             color: var(--accent);
             text-decoration: underline;
         }
-        
+
         /* Animation for prediction result */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        
+
         .result-animation {
             animation: fadeIn 0.6s ease-out forwards;
         }
-        
+
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .stForm {
@@ -211,7 +210,11 @@ st.markdown("""
 # Load the trained model
 @st.cache_resource
 def load_model():
-    return pickle.load(open("model.pkl", "rb"))
+    try:
+        return pickle.load(open("model.pkl", "rb"))
+    except FileNotFoundError:
+        st.error("Model file not found. Please ensure 'model.pkl' is in the correct directory.")
+        return None
 
 model = load_model()
 
@@ -225,9 +228,11 @@ correct_feature_order = [
     'capital-gain', 'capital-loss', 'hours-per-week', 'native-country'
 ]
 
-label_encoders = {feature: LabelEncoder() for feature in correct_feature_order 
-                 if feature not in ['age', 'fnlwgt', 'educational-num', 'capital-gain', 
-                                  'capital-loss', 'hours-per-week']}
+label_encoders = {
+    feature: LabelEncoder().fit([""] + (["Female", "Male", "Other"] if feature == 'gender' else []))
+    for feature in correct_feature_order
+    if feature not in ['age', 'fnlwgt', 'educational-num', 'capital-gain', 'capital-loss', 'hours-per-week']
+}
 
 # Sidebar with additional info
 with st.sidebar:
@@ -237,7 +242,7 @@ with st.sidebar:
     Advanced machine learning model predicting income levels based on demographic and employment factors.
     </p>
     """, unsafe_allow_html=True)
-    
+
     st.markdown("### 🔍 Model Specifications")
     st.markdown("""
     <div style='background-color: rgba(108, 92, 231, 0.1); padding: 1rem; border-radius: 8px;'>
@@ -255,7 +260,7 @@ with st.sidebar:
         </p>
     </div>
     """, unsafe_allow_html=True)
-    
+
     st.markdown("### 🛠️ How To Use")
     st.markdown("""
     <ol style='color:var(--dark-subtext); padding-left: 1.2rem;'>
@@ -264,13 +269,13 @@ with st.sidebar:
         <li>View detailed prediction and insights</li>
     </ol>
     """, unsafe_allow_html=True)
-    
+
     st.markdown("---")
     st.markdown("""
     <div style='text-align: center;'>
         <p style='color:var(--dark-subtext); margin-bottom: 0.5rem;'>Need help?</p>
-        <button style='background-color: var(--primary); color: white; border: none; border-radius: 6px; padding: 0.5rem 1rem; cursor: pointer; transition: all 0.3s;' 
-                onMouseOver="this.style.backgroundColor='var(--primary-light)'" 
+        <button style='background-color: var(--primary); color: white; border: none; border-radius: 6px; padding: 0.5rem 1rem; cursor: pointer; transition: all 0.3s;'
+                onMouseOver="this.style.backgroundColor='var(--primary-light)'"
                 onMouseOut="this.style.backgroundColor='var(--primary)'">
             Contact Support
         </button>
@@ -291,59 +296,36 @@ tab1, tab2 = st.tabs(["📝 Input Form", "📊 Model Insights"])
 with tab1:
     with st.form("prediction_form"):
         col1, col2 = st.columns(2)
-        
+
         with col1:
             st.markdown("### 👤 Personal Details")
-            age = st.slider("Age", 17, 90, 30, 
-                           help="Select the individual's age in years")
-            gender = st.radio("Gender", 
-                             options=["Female", "Male", "Other"], 
-                             help="Select gender identity",
-                             horizontal=True)
-            marital_status = st.selectbox("Marital Status", 
-                                        options=["Married", "Single", "Divorced", "Widowed", "Separated"],
-                                        help="Current marital status")
-            relationship = st.selectbox("Relationship Status", 
-                                      options=["Husband", "Wife", "Own-child", "Unmarried", "Other-relative"],
-                                      help="Relationship status in household")
-            race = st.selectbox("Race/Ethnicity", 
-                              options=["White", "Black", "Asian-Pac-Islander", "Amer-Indian-Eskimo", "Other"],
-                              help="Race or ethnic group")
-            
+            age = st.slider("Age", 17, 90, 30, help="Select the individual's age in years")
+            gender = st.radio("Gender", options=["Female", "Male", "Other"], help="Select gender identity", horizontal=True)
+            marital_status = st.selectbox("Marital Status", options=["Married", "Single", "Divorced", "Widowed", "Separated"], help="Current marital status")
+            relationship = st.selectbox("Relationship Status", options=["Husband", "Wife", "Own-child", "Unmarried", "Other-relative"], help="Relationship status in household")
+            race = st.selectbox("Race/Ethnicity", options=["White", "Black", "Asian-Pac-Islander", "Amer-Indian-Eskimo", "Other"], help="Race or ethnic group")
+
         with col2:
             st.markdown("### 💼 Employment Details")
-            workclass = st.selectbox("Employment Sector", 
-                                   options=["Private", "Government", "Self-employed", "Non-profit", "Other"],
-                                   help="Primary employment sector")
-            occupation = st.selectbox("Occupation Category", 
-                                   options=["Tech", "Admin", "Services", "Professional", "Manual-labor", "Other"],
-                                   help="Primary occupation field")
-            education = st.selectbox("Highest Education", 
-                                   options=["HS-grad", "Bachelors", "Masters", "Doctorate", "Some-college", "Other"],
-                                   help="Highest level of education completed")
-            education_num = st.slider("Years of Education", 1, 20, 10,
-                                    help="Total years of formal education")
-            hours_per_week = st.slider("Weekly Work Hours", 10, 100, 40,
-                                     help="Typical hours worked per week")
-            native_country = st.selectbox("Country of Origin", 
-                                        options=["United-States", "Mexico", "India", "Philippines", "Germany", "Other"],
-                                        help="Country of birth or origin")
-            
+            workclass = st.selectbox("Employment Sector", options=["Private", "Government", "Self-employed", "Non-profit", "Other"], help="Primary employment sector")
+            occupation = st.selectbox("Occupation Category", options=["Tech", "Admin", "Services", "Professional", "Manual-labor", "Other"], help="Primary occupation field")
+            education = st.selectbox("Highest Education", options=["HS-grad", "Bachelors", "Masters", "Doctorate", "Some-college", "Other"], help="Highest level of education completed")
+            education_num = st.slider("Years of Education", 1, 20, 10, help="Total years of formal education")
+            hours_per_week = st.slider("Weekly Work Hours", 10, 100, 40, help="Typical hours worked per week")
+            native_country = st.selectbox("Country of Origin", options=["United-States", "Mexico", "India", "Philippines", "Germany", "Other"], help="Country of birth or origin")
+
             st.markdown("### 💰 Financial Information")
-            capital_gain = st.number_input("Capital Gains ($)", min_value=0, value=0,
-                                         help="Income from investments or asset sales")
-            capital_loss = st.number_input("Capital Losses ($)", min_value=0, value=0,
-                                         help="Losses from investments or asset sales")
-            fnlwgt = st.number_input("Final Weight", min_value=0, value=100000,
-                                   help="Demographic weighting factor")
-        
+            capital_gain = st.number_input("Capital Gains ($)", min_value=0, value=0, help="Income from investments or asset sales")
+            capital_loss = st.number_input("Capital Losses ($)", min_value=0, value=0, help="Losses from investments or asset sales")
+            fnlwgt = st.number_input("Final Weight", min_value=0, value=100000, help="Demographic weighting factor")
+
         submitted = st.form_submit_button("🔮 Predict Income", use_container_width=True)
 
 with tab2:
     st.markdown("### 🧠 Model Insights & Methodology")
-    
+
     col1, col2 = st.columns(2)
-    
+
     with col1:
         st.markdown("#### 📊 Feature Importance")
         st.markdown("""
@@ -358,7 +340,7 @@ with tab2:
             </ol>
         </div>
         """, unsafe_allow_html=True)
-        
+
         st.markdown("#### 📈 Performance Metrics")
         st.markdown("""
         ```python
@@ -369,7 +351,7 @@ with tab2:
         AUC-ROC: 0.89
         ```
         """)
-    
+
     with col2:
         st.markdown("#### ⚙️ Technical Details")
         st.markdown("""
@@ -388,7 +370,7 @@ with tab2:
             </ul>
         </div>
         """, unsafe_allow_html=True)
-    
+
     st.markdown("### ⚠️ Limitations & Considerations")
     st.markdown("""
     <div style='background-color: rgba(255, 118, 117, 0.1); padding: 1.5rem; border-radius: 10px; border-left: 4px solid var(--danger);'>
@@ -403,13 +385,13 @@ with tab2:
     """, unsafe_allow_html=True)
 
 # Prediction and results
-if submitted:
+if submitted and model:
     with st.spinner('Analyzing data and generating insights...'):
         progress_bar = st.progress(0)
         for percent_complete in range(100):
-            time.sleep(0.02)
+            time.sleep(0.01)
             progress_bar.progress(percent_complete + 1)
-        
+
         try:
             # Convert inputs to encoded values
             gender_encoded = 1 if gender == "Male" else (0 if gender == "Female" else 2)
@@ -426,7 +408,8 @@ if submitted:
             }
 
             for feature, value in categorical_features.items():
-                label_encoders[feature].fit([value])
+                if value not in label_encoders[feature].classes_:
+                    label_encoders[feature].fit([value])
 
             # Create input data DataFrame
             input_data = pd.DataFrame([[
@@ -449,10 +432,10 @@ if submitted:
             # Make prediction
             prediction = model.predict(input_data)[0]
             probability = model.predict_proba(input_data)[0][1]
-            
+
             st.success("Analysis Complete!")
             st.balloons()
-            
+
             # Display prediction with styling and INR conversion
             inr_amount = 50000 * USD_TO_INR
             if prediction == 1:
@@ -503,7 +486,7 @@ if submitted:
                     </div>
                 </div>
                 """, unsafe_allow_html=True)
-            
+
             # Add recommendations section
             st.markdown("### 📝 Personalized Recommendations")
             if prediction == 1:
@@ -570,7 +553,7 @@ if submitted:
                     </div>
                 </div>
                 """, unsafe_allow_html=True)
-                
+
         except Exception as e:
             st.error(f"Prediction error: {str(e)}")
             st.markdown("""
@@ -599,9 +582,9 @@ st.markdown("""
                     </div>
                 </div>
             </div>
-            
-            <hr style="border: none; height: 1px; background-color: #2e2e3a; margin: 1rem 0;" />
-            
+
+            <hr style="border: none; height: 1px; background-color: #2e2e3a; margin: 1rem 0;">
+
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <p style="color: var(--dark-subtext); margin: 0; font-size: 0.8rem;">
                     © 2024 AI Salary Insights Pro. All rights reserved.
@@ -611,12 +594,12 @@ st.markdown("""
                         <em>Exchange Rate:</em> 1 USD ≈ 83 INR
                     </p>
                     <p style="color: var(--dark-subtext); margin: 0; font-size: 0.8rem;">
-                        <a href="#" style="color: var(--dark-subtext);">Privacy Policy</a> | 
+                        <a href="#" style="color: var(--dark-subtext);">Privacy Policy</a> |
                         <a href="#" style="color: var(--dark-subtext);">Terms</a>
                     </p>
                 </div>
             </div>
-            
+
             <p style="color: var(--dark-subtext); margin: 1rem 0 0 0; font-size: 0.7rem; font-style: italic;">
                 Disclaimer: This tool provides statistical estimates only. Results are based on machine learning models and may not reflect actual income. Consult a financial advisor for personal advice.
             </p>
