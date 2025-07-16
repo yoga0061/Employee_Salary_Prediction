@@ -583,56 +583,17 @@ if submitted:
 
 # Footer
 st.markdown("""
-    <div class="footer">
-        <div style="max-width: 1200px; margin: 0 auto; padding: 2rem 0;">
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
-                <div>
-                    <h4 style="color: var(--primary); margin-bottom: 1rem;">AI Salary Insights Pro</h4>
-                    <p style="color: var(--dark-subtext); margin: 0; font-size: 0.9rem;">
-                        Advanced machine learning tool for predicting income levels based on demographic and employment factors.
-                    </p>
-                </div>
-                <div>
-                    <h4 style="color: var(--primary); margin-bottom: 1rem;">Resources</h4>
-                    <ul style="list-style: none; padding: 0; margin: 0;">
-                        <li style="margin-bottom: 0.5rem;"><a href="#" style="color: var(--primary-light); text-decoration: none;">Documentation</a></li>
-                        <li style="margin-bottom: 0.5rem;"><a href="#" style="color: var(--primary-light); text-decoration: none;">Tutorials</a></li>
-                        <li style="margin-bottom: 0.5rem;"><a href="#" style="color: var(--primary-light); text-decoration: none;">FAQ</a></li>
-                        <li style="margin-bottom: 0.5rem;"><a href="#" style="color: var(--primary-light); text-decoration: none;">Blog</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 style="color: var(--primary); margin-bottom: 1rem;">Connect</h4>
-                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-                        <a href="https://www.linkedin.com/in/yoganandha-banavathu-a02092305/" target="_blank" style="color: var(--primary-light); text-decoration: none;">LinkedIn</a>
-                        <a href="https://yoga0061.github.io/portfolio/" target="_blank" style="color: var(--primary-light); text-decoration: none;">Portfolio</a>
-                        <a href="mailto:yoganandha@example.com" style="color: var(--primary-light); text-decoration: none;">Email</a>
-                        <a href="#" style="color: var(--primary-light); text-decoration: none;">Twitter</a>
-                    </div>
-                </div>
-                <div>
-                    <h4 style="color: var(--primary); margin-bottom: 1rem;">Legal</h4>
-                    <ul style="list-style: none; padding: 0; margin: 0;">
-                        <li style="margin-bottom: 0.5rem;"><a href="#" style="color: var(--primary-light); text-decoration: none;">Privacy Policy</a></li>
-                        <li style="margin-bottom: 0.5rem;"><a href="#" style="color: var(--primary-light); text-decoration: none;">Terms of Service</a></li>
-                        <li style="margin-bottom: 0.5rem;"><a href="#" style="color: var(--primary-light); text-decoration: none;">Cookie Policy</a></li>
-                    </ul>
-                </div>
-            </div>
-            <hr style="border: none; height: 1px; background-color: #2e2e3a; margin: 1rem 0;">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
-                <p style="color: var(--dark-subtext); margin: 0; font-size: 0.8rem;">
-                    © 2024 AI Salary Insights Pro. All rights reserved.
-                </p>
-                <div style="display: flex; gap: 1rem; margin: 0.5rem 0;">
-                    <p style="color: var(--dark-subtext); margin: 0; font-size: 0.8rem;">
-                        <em>Exchange Rate:</em> 1 USD ≈ 83 INR
-                    </p>
-                </div>
-            </div>
-            <p style="color: var(--dark-subtext); margin: 1rem 0 0 0; font-size: 0.7rem; font-style: italic; text-align: center;">
-                Disclaimer: This tool provides statistical estimates only. Results are based on machine learning models and may not reflect actual income. Consult a financial advisor for personal advice.
+    <div class="footer" style="background-color: var(--dark-card); padding: 1rem; text-align: center; margin-top: 2rem;">
+        <div style="max-width: 800px; margin: 0 auto;">
+            <p style="color: var(--dark-text); margin: 0; font-size: 1rem;">
+                &copy; 2024 Yoganandha
             </p>
+            <div style="display: flex; justify-content: center; gap: 1rem; margin-top: 0.5rem;">
+                <a href="" target="_blank" style="color: var(--primary-light); text-decoration: none;">GitHub</a>
+                <a href="https://www.linkedin.com/in/yoganandha-banavathu-a02092305/" target="_blank" style="color: var(--primary-light); text-decoration: none;">LinkedIn</a>
+                <a href="mailto:yoga.142007@gmail.com" style="color: var(--primary-light); text-decoration: none;">Email</a>
+            </div>
         </div>
     </div>
 """, unsafe_allow_html=True)
+
