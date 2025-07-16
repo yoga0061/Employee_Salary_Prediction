@@ -5,8 +5,8 @@ from sklearn.preprocessing import LabelEncoder
 
 # Page configuration
 st.set_page_config(
-    page_title="Quantum Salary Predictor",
-    page_icon="🌌",
+    page_title="Salary Predictor Pro",
+    page_icon="💼",
     layout="wide",
     initial_sidebar_state="expanded"
 )
