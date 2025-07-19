@@ -13,7 +13,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom Dark Theme CSS
+# Custom Dark Theme CSS with Fire Animation
 st.markdown("""
     <style>
         :root {
@@ -73,6 +73,8 @@ st.markdown("""
             border: 1px solid #2e2e3a;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
         
         .prediction-box:hover {
@@ -196,6 +198,48 @@ st.markdown("""
             animation: fadeIn 0.6s ease-out forwards;
         }
         
+        /* Fire animation */
+        .fire-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 20px;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .fire {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .particle {
+            position: absolute;
+            bottom: 0;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: linear-gradient(to top, #ff7800, #ff4d00, #ff0000);
+            animation: fire-animation 2s ease-out infinite;
+            opacity: 0;
+        }
+        
+        @keyframes fire-animation {
+            0% {
+                transform: translateY(0) translateX(0) scale(0.5);
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) translateX(calc(var(--random-x) * 20px - 10px)) scale(1.5);
+                opacity: 0;
+            }
+        }
+        
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .stForm {
@@ -228,6 +272,38 @@ correct_feature_order = [
 label_encoders = {feature: LabelEncoder() for feature in correct_feature_order 
                  if feature not in ['age', 'fnlwgt', 'educational-num', 'capital-gain', 
                                   'capital-loss', 'hours-per-week']}
+
+# JavaScript for fire effect
+FIRE_JS = """
+<script>
+function createFireEffect(container) {
+    const fireContainer = document.createElement('div');
+    fireContainer.className = 'fire-container';
+    const fire = document.createElement('div');
+    fire.className = 'fire';
+    fireContainer.appendChild(fire);
+    container.appendChild(fireContainer);
+    
+    // Create particles
+    for (let i = 0; i < 30; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.setProperty('--random-x', Math.random());
+        particle.style.animationDelay = Math.random() * 2 + 's';
+        fire.appendChild(particle);
+    }
+}
+
+// Create fire effect when prediction is shown
+if (window.location.hash === '#prediction-shown') {
+    const predictionBoxes = document.querySelectorAll('.prediction-box');
+    predictionBoxes.forEach(box => {
+        createFireEffect(box);
+    });
+}
+</script>
+"""
 
 # Sidebar with additional info
 with st.sidebar:
@@ -452,6 +528,12 @@ if submitted:
             
             st.success("Analysis Complete!")
             st.balloons()
+            
+            # Add JavaScript for fire effect
+            st.markdown(FIRE_JS, unsafe_allow_html=True)
+            
+            # Scroll to results
+            st.markdown('<div id="prediction-shown"></div>', unsafe_allow_html=True)
             
             # Display prediction with styling and INR conversion
             inr_amount = 50000 * USD_TO_INR
