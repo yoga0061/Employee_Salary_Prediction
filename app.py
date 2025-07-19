@@ -583,35 +583,43 @@ if submitted:
 
 # Footer
 st.markdown("""
-    <div class="footer" style="background-color: var(--dark-card); padding: 1.5rem; text-align: center; margin-top: 3rem; border-top: 1px solid #2e2e3a;">
-        <div style="max-width: 1200px; margin: 0 auto;">
-            <div style="display: flex; flex-direction: column; align-items: center; gap: 1rem;">
-                <div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
-                    <div style="text-align: center;">
-                        <h3 style="margin-bottom: 1rem; color: var(--primary);">Salary Predictor</h3>
-                        <p style="color: var(--dark-subtext); margin: 0; font-size: 0.9rem; line-height: 1.5;">
-                            Advanced income prediction using machine learning
-                        </p>
-                    </div>
+    <div class="footer" style="background-color: var(--dark-card); padding: 2rem 1rem; text-align: center; margin-top: 4rem; border-top: 1px solid #2e2e3a; font-family: 'Segoe UI', sans-serif;">
+        <div style="max-width: 1100px; margin: 0 auto;">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 1.2rem;">
+                
+                <!-- Title and Description -->
+                <div style="text-align: center;">
+                    <h2 style="margin-bottom: 0.5rem; color: var(--primary); font-size: 1.6rem;">Salary Predictor</h2>
+                    <p style="color: var(--dark-subtext); font-size: 0.95rem;">
+                        Empowering career insights with AI-driven income prediction.
+                    </p>
                 </div>
-                <div style="display: flex; justify-content: center; gap: 1.5rem; margin-top: 1rem;">
-                    <a href="https://github.com/yoga0061" target="_blank" style="color: var(--primary-light); text-decoration: none; transition: all 0.3s;" title="GitHub">
-                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub" style="width: 24px; height: 24px; filter: invert(0.7);"/>
+
+                <!-- Social Links -->
+                <div style="display: flex; justify-content: center; gap: 1.8rem; margin-top: 0.8rem;">
+                    <a href="https://github.com/yoga0061" target="_blank" title="GitHub" style="transition: transform 0.3s;">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub" style="width: 28px; height: 28px; filter: invert(0.8);"/>
                     </a>
-                    <a href="https://www.linkedin.com/in/yoganandha-banavathu-a02092305/" target="_blank" style="color: var(--primary-light); text-decoration: none; transition: all 0.3s;" title="LinkedIn">
-                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg" alt="LinkedIn" style="width: 24px; height: 24px; filter: invert(0.7);"/>
+                    <a href="https://www.linkedin.com/in/yoganandha-banavathu-a02092305/" target="_blank" title="LinkedIn" style="transition: transform 0.3s;">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg" alt="LinkedIn" style="width: 28px; height: 28px; filter: invert(0.8);"/>
                     </a>
-                    <a href="mailto:yoga.142007@gmail.com" style="color: var(--primary-light); text-decoration: none; transition: all 0.3s;" title="Email">
-                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" alt="Email" style="width: 24px; height: 24px; filter: invert(0.7);"/>
+                    <a href="mailto:yoga.142007@gmail.com" title="Email" style="transition: transform 0.3s;">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" alt="Email" style="width: 28px; height: 28px; filter: invert(0.8);"/>
                     </a>
                 </div>
-                <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid #2e2e3a; width: 100%;">
-                    <p style="color: var(--dark-subtext); margin: 0; font-size: 0.8rem;">
-                        &copy; 2024 Yoganandha. All rights reserved.
+
+                <!-- Bottom Note -->
+                <div style="margin-top: 2rem; border-top: 1px solid #3a3a4a; width: 100%; padding-top: 1rem;">
+                    <p style="color: var(--dark-subtext); font-size: 0.8rem; margin: 0;">
+                        &copy; 2025 <strong>Yoganandha</strong>. Built with ❤️ | All rights reserved.
+                    </p>
+                    <p style="color: var(--dark-subtext); font-size: 0.75rem; margin: 0.3rem 0 0;">
+                        <em>Disclaimer:</em> This tool provides AI-generated salary estimates and may not reflect actual figures.
                     </p>
                 </div>
             </div>
         </div>
     </div>
 """, unsafe_allow_html=True)
+
 
