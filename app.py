@@ -583,17 +583,49 @@ if submitted:
 
 # Footer
 st.markdown("""
-    <div class="footer" style="background-color: var(--dark-card); padding: 1rem; text-align: center; margin-top: 2rem;">
-        <div style="max-width: 800px; margin: 0 auto;">
-            <p style="color: var(--dark-text); margin: 0; font-size: 1rem;">
-                &copy; 2024 Yoganandha
-            </p>
-            <div style="display: flex; justify-content: center; gap: 1rem; margin-top: 0.5rem;">
-                <a href="" target="_blank" style="color: var(--primary-light); text-decoration: none;">GitHub</a>
-                <a href="https://www.linkedin.com/in/yoganandha-banavathu-a02092305/" target="_blank" style="color: var(--primary-light); text-decoration: none;">LinkedIn</a>
-                <a href="mailto:yoga.142007@gmail.com" style="color: var(--primary-light); text-decoration: none;">Email</a>
+    <div class="footer" style="background: linear-gradient(to right, #2c3e50, #34495e); padding: 2rem; text-align: center; margin-top: 2rem; box-shadow: 0 -2px 10px rgba(0,0,0,0.1);">
+        <div style="max-width: 1000px; margin: 0 auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                <div style="flex: 1; min-width: 250px; text-align: left; color: white;">
+                    <h3 style="margin-bottom: 1rem; color: #ecf0f1;">About Me</h3>
+                    <p style="color: #bdc3c7; margin: 0; font-size: 0.9rem; line-height: 1.5;">
+                        I'm a passionate developer with expertise in various technologies. This portfolio showcases my projects and skills.
+                    </p>
+                </div>
+                <div style="flex: 1; min-width: 250px; text-align: center;">
+                    <h3 style="margin-bottom: 1rem; color: #ecf0f1;">Quick Links</h3>
+                    <div style="display: flex; justify-content: center; gap: 1rem;">
+                        <a href="#home" style="color: #3498db; text-decoration: none; font-size: 0.9rem;">Home</a>
+                        <a href="#projects" style="color: #3498db; text-decoration: none; font-size: 0.9rem;">Projects</a>
+                        <a href="#skills" style="color: #3498db; text-decoration: none; font-size: 0.9rem;">Skills</a>
+                        <a href="#contact" style="color: #3498db; text-decoration: none; font-size: 0.9rem;">Contact</a>
+                    </div>
+                </div>
+                <div style="flex: 1; min-width: 250px; text-align: right;">
+                    <h3 style="margin-bottom: 1rem; color: #ecf0f1;">Connect With Me</h3>
+                    <div style="display: flex; justify-content: flex-end; gap: 1rem;">
+                        <a href="https://github.com/yoga0061" target="_blank" style="text-decoration: none;" title="GitHub">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub" style="width: 24px; height: 24px; filter: invert(1);"/>
+                        </a>
+                        <a href="https://www.linkedin.com/in/yoganandha-banavathu-a02092305/" target="_blank" style="text-decoration: none;" title="LinkedIn">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg" alt="LinkedIn" style="width: 24px; height: 24px; filter: invert(1);"/>
+                        </a>
+                        <a href="mailto:yoga.142007@gmail.com" style="text-decoration: none;" title="Email">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" alt="Email" style="width: 24px; height: 24px; filter: invert(1);"/>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #34495e;">
+                <p style="color: #bdc3c7; margin: 0; font-size: 0.8rem;">
+                    &copy; 2024 Yoganandha. All rights reserved.
+                </p>
+                <div style="display: flex; justify-content: center; gap: 1rem; margin-top: 0.5rem;">
+                    <a href="#" style="color: #bdc3c7; text-decoration: none; font-size: 0.8rem;">Privacy Policy</a>
+                    <a href="#" style="color: #bdc3c7; text-decoration: none; font-size: 0.8rem;">Terms of Service</a>
+                    <a href="#" style="color: #bdc3c7; text-decoration: none; font-size: 0.8rem;">Sitemap</a>
+                </div>
             </div>
         </div>
     </div>
 """, unsafe_allow_html=True)
-
