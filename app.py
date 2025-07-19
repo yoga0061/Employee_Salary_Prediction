@@ -583,43 +583,64 @@ if submitted:
 
 # Footer
 st.markdown("""
-    <div class="footer" style="background-color: var(--dark-card); padding: 2rem 1rem; text-align: center; margin-top: 4rem; border-top: 1px solid #2e2e3a; font-family: 'Segoe UI', sans-serif;">
-        <div style="max-width: 1100px; margin: 0 auto;">
-            <div style="display: flex; flex-direction: column; align-items: center; gap: 1.2rem;">
-                
-                <!-- Title and Description -->
-                <div style="text-align: center;">
-                    <h2 style="margin-bottom: 0.5rem; color: var(--primary); font-size: 1.6rem;">Salary Predictor</h2>
-                    <p style="color: var(--dark-subtext); font-size: 0.95rem;">
-                        Empowering career insights with AI-driven income prediction.
-                    </p>
-                </div>
-
-                <!-- Social Links -->
-                <div style="display: flex; justify-content: center; gap: 1.8rem; margin-top: 0.8rem;">
-                    <a href="https://github.com/yoga0061" target="_blank" title="GitHub" style="transition: transform 0.3s;">
-                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub" style="width: 28px; height: 28px; filter: invert(0.8);"/>
-                    </a>
-                    <a href="https://www.linkedin.com/in/yoganandha-banavathu-a02092305/" target="_blank" title="LinkedIn" style="transition: transform 0.3s;">
-                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg" alt="LinkedIn" style="width: 28px; height: 28px; filter: invert(0.8);"/>
-                    </a>
-                    <a href="mailto:yoga.142007@gmail.com" title="Email" style="transition: transform 0.3s;">
-                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" alt="Email" style="width: 28px; height: 28px; filter: invert(0.8);"/>
-                    </a>
-                </div>
-
-                <!-- Bottom Note -->
-                <div style="margin-top: 2rem; border-top: 1px solid #3a3a4a; width: 100%; padding-top: 1rem;">
-                    <p style="color: var(--dark-subtext); font-size: 0.8rem; margin: 0;">
-                        &copy; 2025 <strong>Yoganandha</strong>. Built with ❤️ | All rights reserved.
-                    </p>
-                    <p style="color: var(--dark-subtext); font-size: 0.75rem; margin: 0.3rem 0 0;">
-                        <em>Disclaimer:</em> This tool provides AI-generated salary estimates and may not reflect actual figures.
-                    </p>
-                </div>
+    <div class="footer" style="
+        background-color: var(--dark-card);
+        padding: 2rem 1rem;
+        text-align: center;
+        margin-top: 4rem;
+        border-top: 1px solid #2e2e3a;
+        font-family: 'Inter', sans-serif;
+    ">
+        <div style="max-width: 1000px; margin: 0 auto;">
+            <div style="margin-bottom: 1.5rem;">
+                <h3 style="
+                    color: var(--primary);
+                    margin-bottom: 0.5rem;
+                    font-size: 1.5rem;
+                ">💼 Salary Predictor</h3>
+                <p style="
+                    color: var(--dark-subtext);
+                    font-size: 0.95rem;
+                    margin: 0;
+                ">AI-powered income prediction using Machine Learning</p>
+            </div>
+            <div style="
+                display: flex;
+                justify-content: center;
+                gap: 1.2rem;
+                margin: 1.5rem 0;
+                flex-wrap: wrap;
+            ">
+                <a href="https://github.com/yoga0061" target="_blank" title="GitHub" style="transition: transform 0.2s;">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg"
+                         alt="GitHub" style="width: 26px; height: 26px; filter: invert(0.7);"/>
+                </a>
+                <a href="https://www.linkedin.com/in/yoganandha-banavathu-a02092305/" target="_blank" title="LinkedIn" style="transition: transform 0.2s;">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg"
+                         alt="LinkedIn" style="width: 26px; height: 26px; filter: invert(0.7);"/>
+                </a>
+                <a href="mailto:yoga.142007@gmail.com" title="Email" style="transition: transform 0.2s;">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg"
+                         alt="Email" style="width: 26px; height: 26px; filter: invert(0.7);"/>
+                </a>
+            </div>
+            <div style="
+                border-top: 1px solid #3a3a4a;
+                padding-top: 1rem;
+                margin-top: 1.5rem;
+            ">
+                <p style="
+                    color: var(--dark-subtext);
+                    font-size: 0.8rem;
+                    margin: 0;
+                ">
+                    © 2025 <strong>Yoganandha</strong>. All rights reserved. | Built with ❤️ using Streamlit
+                </p>
+                <p style="color: var(--dark-subtext); font-size: 0.75rem; margin-top: 0.3rem;">
+                    <em>Disclaimer:</em> This tool provides AI-based predictions for educational use only.
+                </p>
             </div>
         </div>
     </div>
 """, unsafe_allow_html=True)
-
 
