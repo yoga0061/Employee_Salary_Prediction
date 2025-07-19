@@ -666,36 +666,57 @@ if submitted:
 # Footer
 st.markdown("""
     <div style="
-        background-color: #1e1e2e;
+        background-color: var(--dark-card);
         padding: 2rem 1rem;
         text-align: center;
-        margin-top: 3rem;
+        margin-top: 4rem;
         border-top: 1px solid #2e2e3a;
         font-family: 'Inter', sans-serif;
     ">
-        <div style="max-width: 600px; margin: 0 auto;">
-            <div style="margin-bottom: 1rem;">
-                <p style="color: #a7a9be; margin: 0; font-size: 0.9rem;">
-                    © 2023 <strong>Yoganandha</strong> | Built with ❤️ using Streamlit
-                </p>
+        <div style="max-width: 1000px; margin: 0 auto;">
+            <div style="margin-bottom: 1.5rem;">
+                <h3 style="
+                    color: var(--primary);
+                    margin-bottom: 0.5rem;
+                    font-size: 1.5rem;
+                ">💼 Salary Predictor</h3>
+                <p style="
+                    color: var(--dark-subtext);
+                    font-size: 0.95rem;
+                    margin: 0;
+                ">Developed by Yoganandha</p>
             </div>
-            <div style="display: flex; justify-content: center; gap: 1.5rem; margin: 1rem 0;">
-                <a href="https://github.com/yoga0061" target="_blank" style="display: flex; align-items: center; gap: 0.5rem; text-decoration: none; color: #a29bfe;">
-                    <img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" width="20" height="20" style="filter: invert(0.7);">
-                    GitHub
+            <div style="
+                display: flex;
+                justify-content: center;
+                gap: 1.2rem;
+                margin: 1.5rem 0;
+                flex-wrap: wrap;
+            ">
+                <a href="https://github.com/yoga0061" target="_blank" title="GitHub" style="transition: transform 0.2s;">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg"
+                         alt="GitHub" style="width: 26px; height: 26px; filter: invert(0.7);"/>
                 </a>
-                <a href="https://www.linkedin.com/in/yoganandha-banavathu-a02092305/" target="_blank" style="display: flex; align-items: center; gap: 0.5rem; text-decoration: none; color: #a29bfe;">
-                    <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" width="20" height="20" style="filter: invert(0.7);">
-                    LinkedIn
+                <a href="https://www.linkedin.com/in/yoganandha-banavathu-a02092305/" target="_blank" title="LinkedIn" style="transition: transform 0.2s;">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg"
+                         alt="LinkedIn" style="width: 26px; height: 26px; filter: invert(0.7);"/>
                 </a>
-                <a href="mailto:yoga.142007@gmail.com" style="display: flex; align-items: center; gap: 0.5rem; text-decoration: none; color: #a29bfe;">
-                    <img src="https://cdn-icons-png.flaticon.com/512/281/281769.png" width="20" height="20" style="filter: invert(0.7);">
-                    Email
+                <a href="mailto:yoga.142007@gmail.com" title="Email" style="transition: transform 0.2s;">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg"
+                         alt="Email" style="width: 26px; height: 26px; filter: invert(0.7);"/>
                 </a>
             </div>
-            <div style="margin-top: 1rem;">
-                <p style="color: #6c6c7d; font-size: 0.8rem; margin: 0;">
-                    AI-powered salary prediction tool
+            <div style="
+                border-top: 1px solid #3a3a4a;
+                padding-top: 1rem;
+                margin-top: 1.5rem;
+            ">
+                <p style="
+                    color: var(--dark-subtext);
+                    font-size: 0.8rem;
+                    margin: 0;
+                ">
+                    © 2025 All rights reserved | AI-powered income prediction tool
                 </p>
             </div>
         </div>
