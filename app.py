@@ -665,119 +665,25 @@ if submitted:
 
 # Footer
 st.markdown("""
-    <div class="footer" style="
-        background: linear-gradient(135deg, var(--dark-card) 0%, #1a1a24 100%);
-        padding: 3rem 1rem;
+    <div style="
+        background-color: #1e1e2e;
+        padding: 1.5rem;
         text-align: center;
-        margin-top: 4rem;
-        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        margin-top: 3rem;
+        border-top: 1px solid #2e2e3a;
         font-family: 'Inter', sans-serif;
-        box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.15);
     ">
-        <div style="max-width: 1000px; margin: 0 auto;">
-            <div style="margin-bottom: 2rem;">
-                <h3 style="
-                    color: var(--primary);
-                    margin-bottom: 0.75rem;
-                    font-size: 1.75rem;
-                    font-weight: 700;
-                    letter-spacing: -0.5px;
-                ">💼 Salary Predictor Pro</h3>
-                <p style="
-                    color: var(--dark-subtext);
-                    font-size: 1rem;
-                    margin: 0;
-                    opacity: 0.9;
-                    max-width: 600px;
-                    margin: 0 auto;
-                    line-height: 1.5;
-                ">Advanced AI-powered income prediction using state-of-the-art Machine Learning algorithms</p>
-            </div>
-            <div style="
-                display: flex;
-                justify-content: center;
-                gap: 1.5rem;
-                margin: 2rem 0;
-                flex-wrap: wrap;
-            ">
-                <a href="https://github.com/yoga0061" target="_blank" title="GitHub" 
-                   style="transition: all 0.3s ease; transform: scale(1);"
-                   onmouseover="this.style.transform='scale(1.1)'"
-                   onmouseout="this.style.transform='scale(1)'">
-                    <div style="
-                        width: 40px;
-                        height: 40px;
-                        background: rgba(255, 255, 255, 0.05);
-                        border-radius: 50%;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        border: 1px solid rgba(255, 255, 255, 0.1);
-                    ">
-                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg"
-                             alt="GitHub" style="width: 22px; height: 22px; filter: invert(0.7);"/>
-                    </div>
-                </a>
-                <a href="https://www.linkedin.com/in/yoganandha-banavathu-a02092305/" target="_blank" title="LinkedIn" 
-                   style="transition: all 0.3s ease; transform: scale(1);"
-                   onmouseover="this.style.transform='scale(1.1)'"
-                   onmouseout="this.style.transform='scale(1)'">
-                    <div style="
-                        width: 40px;
-                        height: 40px;
-                        background: rgba(255, 255, 255, 0.05);
-                        border-radius: 50%;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        border: 1px solid rgba(255, 255, 255, 0.1);
-                    ">
-                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg"
-                             alt="LinkedIn" style="width: 22px; height: 22px; filter: invert(0.7);"/>
-                    </div>
-                </a>
-                <a href="mailto:yoga.142007@gmail.com" title="Email" 
-                   style="transition: all 0.3s ease; transform: scale(1);"
-                   onmouseover="this.style.transform='scale(1.1)'"
-                   onmouseout="this.style.transform='scale(1)'">
-                    <div style="
-                        width: 40px;
-                        height: 40px;
-                        background: rgba(255, 255, 255, 0.05);
-                        border-radius: 50%;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        border: 1px solid rgba(255, 255, 255, 0.1);
-                    ">
-                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg"
-                             alt="Email" style="width: 22px; height: 22px; filter: invert(0.7);"/>
-                    </div>
-                </a>
-            </div>
-            <div style="
-                border-top: 1px solid rgba(255, 255, 255, 0.05);
-                padding-top: 1.5rem;
-                margin-top: 1.5rem;
-            ">
-                <p style="
-                    color: var(--dark-subtext);
-                    font-size: 0.85rem;
-                    margin: 0;
-                    opacity: 0.8;
-                ">
-                    © 2025 <strong style="font-weight: 600;">Yoganandha</strong>. All rights reserved. | Built with ❤️ using Streamlit & Python
-                </p>
-                <p style="
-                    color: var(--dark-subtext);
-                    font-size: 0.75rem;
-                    margin-top: 0.5rem;
-                    opacity: 0.6;
-                    font-style: italic;
-                ">
-                    <em>Disclaimer:</em> Predictions are AI-generated estimates and should not be considered as financial advice.
-                </p>
-            </div>
+        <div style="margin-bottom: 1rem;">
+            <p style="color: #a7a9be; margin: 0; font-size: 0.9rem;">
+                © 2023 Salary Predictor | Made with Streamlit
+            </p>
+        </div>
+        <div style="display: flex; justify-content: center; gap: 1rem;">
+            <a href="https://github.com/yourusername" target="_blank" style="color: #a29bfe; text-decoration: none;">GitHub</a>
+            <span style="color: #a7a9be;">•</span>
+            <a href="https://linkedin.com/in/yourprofile" target="_blank" style="color: #a29bfe; text-decoration: none;">LinkedIn</a>
+            <span style="color: #a7a9be;">•</span>
+            <a href="mailto:youremail@example.com" style="color: #a29bfe; text-decoration: none;">Contact</a>
         </div>
     </div>
 """, unsafe_allow_html=True)
