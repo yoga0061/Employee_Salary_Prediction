@@ -7,7 +7,7 @@ import time
 
 # Page configuration
 st.set_page_config(
-    page_title="AI Salary Insights Pro",
+    page_title="Salary Predictor",
     page_icon="💼",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -231,7 +231,7 @@ label_encoders = {feature: LabelEncoder() for feature in correct_feature_order
 
 # Sidebar with additional info
 with st.sidebar:
-    st.markdown("## 💼 AI Salary Insights")
+    st.markdown("## 💼Salary Predictor")
     st.markdown("""
     <p style='color:var(--dark-subtext)'>
     Advanced machine learning model predicting income levels based on demographic and employment factors.
@@ -245,13 +245,13 @@ with st.sidebar:
         <strong>Algorithm:</strong> Random Forest Classifier
         </p>
         <p style='color:var(--dark-subtext); margin-bottom: 0.5rem;'>
-        <strong>Accuracy:</strong> 85.2% (test set)
+        <strong>Accuracy:</strong> 86.4% (test set)
         </p>
         <p style='color:var(--dark-subtext); margin-bottom: 0.5rem;'>
         <strong>Training Data:</strong> US Census Bureau
         </p>
         <p style='color:var(--dark-subtext); margin-bottom: 0;'>
-        <strong>Last Updated:</strong> June 2024
+        <strong>Last Updated:</strong> July 2024
         </p>
     </div>
     """, unsafe_allow_html=True)
@@ -278,7 +278,7 @@ with st.sidebar:
     """, unsafe_allow_html=True)
 
 # Main content
-st.title("💼 AI Salary Insights Pro")
+st.title("💼 Salary Predictor")
 st.markdown("""
 <p style='color:var(--dark-subtext); font-size: 1.1rem;'>
 Predict whether an individual's income exceeds $50K/year (₹4,150,000/year) based on comprehensive demographic analysis.
@@ -362,7 +362,7 @@ with tab2:
         st.markdown("#### 📈 Performance Metrics")
         st.markdown("""
         ```python
-        Accuracy: 85.2%
+        Accuracy: 86.4%
         Precision: 0.83
         Recall: 0.62
         F1 Score: 0.71
